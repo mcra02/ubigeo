@@ -7,6 +7,7 @@ from api.serializers import (
     ProvinciaSerializer,
     DistritoSerializer
 )
+import psycopg2
 
 class ScriptExcel:
 
@@ -48,4 +49,48 @@ class ScriptExcel:
                 elm_index += 1            
             indice -= 1
         return elements
+
+    def inserData(self, data):
+
+        connection = psycopg2.connect(user="postgres",
+                                      password="admin",
+                                      host="127.18.0.1",
+                                      port="5432",
+                                      database="VEOX_2020_DEV")
+        obj_depatamento = data[0]
+        departamentos = obj_depatamento['Departamento']
+        for dato in departamentos:
+            cursor = connection.cursor()
+            sql_insert_query = """ INSERT INTO GN.GN_REGION (in_id_pais, vc_nombre, vc_descripcion, vc_ubigeo, bo_estado, vc_id_usuario_creacion, vc_id_usuario_modificacion, ts_fecha_creacion, ts_fecha_modificacion) 
+                            VALUES ('1',%s,%s,'','1','VEOX','VEOX','NOW()','NOW()') """
+            records = [ (dato['name'], dato['descripcion']) ]
+
+            # executemany() to insert multiple rows rows
+            result = cursor.executemany(sql_insert_query, records)
+            connection.commit()
+            print(cursor.rowcount, "Record inserted successfully into mobile table")
         
+        obj_provincia = data[1]
+        provincias = obj_provincia['Provincia']
+        for dato in provincias:
+            cursor = connection.cursor()
+            sql_insert_query = """ INSERT INTO GN.GN_PROVINCIA (in_id_region, vc_nombre, vc_descripcion, vc_ubigeo, bo_estado, vc_id_usuario_creacion, vc_id_usuario_modificacion, ts_fecha_creacion, ts_fecha_modificacion) 
+                            VALUES (%s,%s,%s,'','1','VEOX','VEOX','NOW()','NOW()') """
+            records = [ (dato['departamento'],dato['name'], dato['descripcion']) ]
+
+            # executemany() to insert multiple rows rows
+            result = cursor.executemany(sql_insert_query, records)
+            connection.commit()
+            print(cursor.rowcount, "Record inserted successfully into mobile table")
+        obj_distrito = data[2]
+        distritos = obj_distrito['Distrito']
+        for dato in distritos:
+            cursor = connection.cursor()
+            sql_insert_query = """ INSERT INTO GN.GN_DISTRITO (in_id_provincia, vc_nombre, vc_descripcion, vc_ubigeo, bo_estado, vc_id_usuario_creacion, vc_id_usuario_modificacion, ts_fecha_creacion, ts_fecha_modificacion) 
+                            VALUES (%s,%s,%s,'','1','VEOX','VEOX','NOW()','NOW()') """
+            records = [ (dato['provincia'],dato['name'], dato['descripcion']) ]
+
+            # executemany() to insert multiple rows rows
+            result = cursor.executemany(sql_insert_query, records)
+            connection.commit()
+            print(cursor.rowcount, "Record inserted successfully into mobile table")
