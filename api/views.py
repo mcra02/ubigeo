@@ -72,5 +72,4 @@ class FileViewSet(viewsets.ViewSet):
             pickle.dump(request.data['file_xls'], output, pickle.HIGHEST_PROTOCOL)
         data = ScriptExcel.extractData(self, xls_path, request.data['key'], array_index)
         elements = ScriptExcel.mapData(self, json.loads(data))
-        ScriptExcel.inserData(self, elements)
         return Response(elements)
