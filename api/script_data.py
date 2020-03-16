@@ -49,3 +49,6 @@ class ScriptExcel:
                 elm_index += 1            
             indice -= 1
         return elements
+
+    def inserData(self, data):
+        print(data[0])

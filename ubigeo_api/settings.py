@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'ubigeo',
         'USER': 'postgres',
         'PASSWORD': 'admin',
-        'HOST': '172.18.0.1',
+        'HOST': '172.17.0.1',
         'PORT': '5432',
         'OPTIONS': {
             'options': '-c search_path=public'
