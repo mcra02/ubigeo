@@ -51,4 +51,34 @@ class ScriptExcel:
         return elements
 
     def inserData(self, data):
-        print(data[0])
+
+        #preparanmos el Serializar con los elementos:
+        #  si ubie se uno elemento  data =(a:"",b:"")
+        # si fueran varios data = {(a:"",b:""),(a:"",b:""),...,(a:"",b:"")}  many= True
+        serializerDepartamento = DepartamentoSerializer(data=data[0]["Departamento"],many=True)
+        
+        
+        #print(serializerProvincia.is_valid(raise_exception=True))
+        #validamos los campos
+        # raise_exception= True es para que envie automaticamente el error por http
+        if serializerDepartamento.is_valid(raise_exception=True):
+            #si son correctos guardamos
+            serializerDepartamento.save()
+        
+        """else:
+            print(serializerDepartamento.errors)"""
+
+        #repetimos
+        serializerProvincia = ProvinciaSerializer(data=data[1]["Provincia"],many=True)
+
+        if serializerProvincia.is_valid():
+            serializerProvincia.save()
+        
+
+        serializerDistrito = DistritoSerializer(data=data[2]["Distrito"],many=True)
+
+        if serializerDistrito.is_valid():
+            serializerDistrito.save()
+        
+
+        """print(data[0])"""
