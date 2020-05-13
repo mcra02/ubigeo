@@ -77,13 +77,13 @@ WSGI_APPLICATION = 'ubigeo_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ubigeo',
+        'NAME': 'STORE_PRODUCT_DEV',
         'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': '172.17.0.1',
+        'PASSWORD': 'covid_19',
+        'HOST': '35.193.163.161',
         'PORT': '5432',
         'OPTIONS': {
-            'options': '-c search_path=public'
+            'options': '-c search_path=gn'
         },
     }
 }
@@ -111,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Lima'
 
 USE_I18N = True
 

@@ -65,12 +65,12 @@ class FileViewSet(viewsets.ViewSet):
     def create(self, request):
         serializer = FileSerializer(data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
-        array_index = json.loads(request.data['encabezado'])
+        array_index = request.data['encabezado'].split(',')
         root = Path(".")
         xls_path = root / "file" /  str(request.data['file_xls'])
         with open(xls_path, 'wb') as output:
             pickle.dump(request.data['file_xls'], output, pickle.HIGHEST_PROTOCOL)
         data = ScriptExcel.extractData(self, xls_path, request.data['key'], array_index)
         elements = ScriptExcel.mapData(self, json.loads(data))
-        ScriptExcel.inserData(self, elements)
-        return Response(elements)
+        res = ScriptExcel.inserData(self, elements)
+        return Response(res)

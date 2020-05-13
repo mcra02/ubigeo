@@ -1,6 +1,8 @@
 import pandas as pd
 import pickle
 import json
+import psycopg2
+
 
 from api.serializers import (
     DepartamentoSerializer,
@@ -19,6 +21,7 @@ class ScriptExcel:
         columnas = encabezado
         df_seleccionados = archivo[columnas]
         data = df_seleccionados.to_json(orient='records')
+        # print(data)
         return data
 
     def mapData(self, data):
@@ -41,6 +44,7 @@ class ScriptExcel:
                         ant_elemnt = elements[elm_index]
                         position = ant_elemnt[arguments[indice]].index(obj_position) + 1
                         obj = {"name": element[item], "descripcion": item + " de " + element[item], arguments[indice].lower(): position}
+                        # print(obj)
                     else:
                         obj = {"name": element[item], "descripcion": item + " de " + element[item]}
                     if obj not in items:
@@ -48,21 +52,37 @@ class ScriptExcel:
                 elements.append({item: items})
                 elm_index += 1            
             indice -= 1
+        # print(elements)
         return elements
 
     def inserData(self, data):
 
+        # conn = psycopg2.connect(host='35.193.163.161',
+        #                         port='5432',
+        #                         user='postgres',
+        #                         password='covid_19',
+        #                         database='STORE_PRODUCT_DEV') # To remove slash
+
+        # cursor = conn.cursor()
+        # cursor.execute("INSERT INTO GN.GN_REGION (vc_nombre, vc_descripcion, vc_ubigeo,bo_estado,vc_id_usuario_creacion,vc_id_usuario_modificacion,ts_fecha_creacion,ts_fecha_modificacion) VALUES(%s, %s, %s)", (v1, v2, v3))
+        # cursor.close()
+        # conn.close()
+
+        # print(data)
+
         #preparanmos el Serializar con los elementos:
         #  si ubie se uno elemento  data =(a:"",b:"")
         # si fueran varios data = {(a:"",b:""),(a:"",b:""),...,(a:"",b:"")}  many= True
+
         serializerDepartamento = DepartamentoSerializer(data=data[0]["Departamento"],many=True)
         
         
-        #print(serializerProvincia.is_valid(raise_exception=True))
+        # print(serializerProvincia.is_valid(raise_exception=True))
         #validamos los campos
         # raise_exception= True es para que envie automaticamente el error por http
         if serializerDepartamento.is_valid(raise_exception=True):
             #si son correctos guardamos
+            # print(serializerDepartamento)
             serializerDepartamento.save()
         
         """else:
@@ -72,12 +92,14 @@ class ScriptExcel:
         serializerProvincia = ProvinciaSerializer(data=data[1]["Provincia"],many=True)
 
         if serializerProvincia.is_valid():
+            # print(serializerProvincia)
             serializerProvincia.save()
         
 
         serializerDistrito = DistritoSerializer(data=data[2]["Distrito"],many=True)
 
         if serializerDistrito.is_valid():
+            # print(serializerDistrito)
             serializerDistrito.save()
         
 

@@ -32,6 +32,16 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+##### 5. Request
+
+```sh
+http://localhost:800/api/file/
+```
+
+key: 'Ubigeo'
+encabezado: 'Ubigeo,Distrtito,Provincia,Departamento'
+file: file.xlsx
+
 ## Autor
 
 👤 **Maicol C Rodrigo**
